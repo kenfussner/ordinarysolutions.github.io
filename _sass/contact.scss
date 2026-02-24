@@ -29,4 +29,36 @@
 	.contact-details {
 		font-size: .9em;
 	}
+
+	.alert {
+		display: flex;
+		border: solid 1px;
+		border-radius: .25rem;
+		padding: .5rem;
+		margin: 1.25rem auto;
+		color: transparent;
+		align-items: center;
+
+		&.alert-success {
+			color: #599B5F;
+			border-color: #599B5F;
+			background-color: rgba(89, 155, 95, 0.15);
+
+			&::before {
+				content: '✓';
+				padding-right: .25em;
+			}
+		}
+
+		&.alert-failure {
+			color: #DB5A42;
+			border-color: #DB5A42;
+			background-color: rgba(219, 90, 66, 0.15);
+
+			&::before {
+				content: 'ⓧ';
+				padding-right: .25em;
+			}
+		}
+	}
 }

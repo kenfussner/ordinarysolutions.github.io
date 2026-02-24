@@ -7,10 +7,7 @@ email: hello@ordinarysolutions.com
 ---
 
 <div class="contact-box">
-	<form action="{{ site.baseurl }}/contact-success/" method="post" class="contact-form">
-		<input type="hidden" name="_to" value="{{page.email}}" />
-		<input type="text" name="_gotcha" style="display: none;">
-
+	<form id="contact-form" class="contact-form">
 		<label for="name">Full Name</label>
 		<input type="text" name="name" id="name" placeholder="Enter your name..." />
 
@@ -20,7 +17,9 @@ email: hello@ordinarysolutions.com
 		<label for="message">Message</label>
 		<textarea name="message" id="message" placeholder="Enter your message..."></textarea>
 
-		<input type="submit" value="Send Message" />
+		<button type="submit" id="send">Send Message</button>
+
+		<div id="alert" class="alert" role="alert"></div>
 	</form>
 
 	<div class="contact-details">
@@ -28,3 +27,70 @@ email: hello@ordinarysolutions.com
 		<p><a href="mailto:{{page.email}}">{{page.email}}</a></p>
 	</div>
 </div>
+
+<script type="text/javascript">
+	const fullName = document.querySelector("#name");
+	const email = document.querySelector("#email");
+	const message = document.querySelector("#message");
+	const button = document.querySelector("#send");
+	const alert = document.querySelector("#alert");
+	const form = document.querySelector("#contact-form");
+	const GOOGLE_FORM_URL =
+	"https://docs.google.com/forms/u/0/d/e/1FAIpQLSfVm4tQJqfiG2ZLq0CYBGMoWGpjyXGAzdPXxciT4TVZkBsTyw/formResponse";
+
+	const buttonText = button.textContent;
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		const control = Math.random();
+		const fullNameValue = fullName.value;
+		const emailValue = email.value;
+		const messageValue = message.value;
+		const formData = {
+			"entry.1451756103": fullNameValue, 
+			"entry.152645520": emailValue, 
+			"entry.1540729069": messageValue, 
+		};
+		const appendedFormData = newFormData({ ...formData });
+
+		try {
+
+			button.disabled = true;
+			button.textContent = "processing...";
+			const response = await fetch(GOOGLE_FORM_URL, {
+				method: "POST",
+				mode: "no-cors",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: appendedFormData,
+			});
+			alert.classList.add('alert-success');
+			alert.innerHtml = 'Message received.';
+		} catch (error) {
+			alert.classList.add('alert-failure');
+			alert.innerHtml = 'Something went wrong. Try again.';
+			console.log(error);
+		} finally {
+			button.disabled = false;
+			button.textContent = buttonText;
+			setTimeout((ctrl) => {
+				if (ctrl === control) {
+					alert.classList.remove('alert-failure');
+					alert.innerHtml = '';
+				}
+			}, 3500, control);
+		}
+	};
+
+	form.addEventListener("submit", handleSubmit);
+
+	// A helper function to help convert the data to FormData
+	const newFormData = (inputs) => {
+	const formData = new FormData();
+	const newArr = Object.entries(inputs);
+	newArr.map((item) => {
+		return formData.append(`${item[0]}`, item[1]);
+	});
+	return formData;
+	};
+</script>
