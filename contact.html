@@ -65,18 +65,18 @@ email: hello@ordinarysolutions.com
 				body: appendedFormData,
 			});
 			alert.classList.add('alert-success');
-			alert.innerHtml = 'Message received.';
+			alert.textContent = 'Message received.';
 		} catch (error) {
 			alert.classList.add('alert-failure');
-			alert.innerHtml = 'Something went wrong. Try again.';
+			alert.textContent = 'Something went wrong. Try again.';
 			console.log(error);
 		} finally {
 			button.disabled = false;
 			button.textContent = buttonText;
 			setTimeout((ctrl) => {
 				if (ctrl === control) {
-					alert.classList.remove('alert-failure');
-					alert.innerHtml = '';
+					alert.classList.remove('alert-success','alert-failure');
+					alert.textContent = '';
 				}
 			}, 3500, control);
 		}
